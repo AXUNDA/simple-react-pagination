@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 
 import "./App.css";
 import Post from "./components/Post";
+import Pagination from "./components/Pagination";
 
 function App() {
   const [posts, setPosts] = useState([]);
@@ -21,11 +22,23 @@ function App() {
     getPosts();
   }, []);
 
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
+
+  const paginate = (number) => setCurrentPage(number);
+
   return (
     <>
       <div className="container mt-5">
         <p className="text-primary mb-3">My App</p>
-        <Post posts={posts} loading={loading} />
+        <Post posts={currentPosts} loading={loading} />
+        <Pagination
+          postPerPage={postsPerPage}
+          totalPosts={posts.length}
+          paginate={paginate}
+          currentPage={currentPage}
+        />
       </div>
     </>
   );
